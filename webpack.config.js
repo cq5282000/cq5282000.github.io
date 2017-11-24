@@ -55,7 +55,7 @@ if (NODE_ENV.toLowerCase() === 'product') {
 
 let publicPathStr = '/entry/'; // 公共路径字符串
 if (NODE_ENV === PRODUCTION) {
-    publicPathStr = '../'
+    publicPathStr = '../';
 }
 
 let webpackConfig = {}; // webpack设置
@@ -75,16 +75,14 @@ const entrySettingItem = (lastPortion) => {
                 BABEL_POLYFILL,
                 `./src/entry/${lastPortion}.js`,
             ];
-            break;
         case PRODUCTION:
             return [
                 ReactHotLoaderStr,
                 BABEL_POLYFILL,
                 `./src/entry/${lastPortion}.js`,
             ];
-            break;
         default: // eslint-disable-line
-            break;
+            return null;
     }
 };
 
@@ -109,7 +107,7 @@ resolve = Object.assign(resolve, { alias }, { extensions });
 // HMR插件
 const HMRPlugin = new webpack.HotModuleReplacementPlugin();
 
-if (NODE_ENV === PRODUCTION) {
+if (NODE_ENV === DEVELOPMENT) {
     plugins = [...plugins, HMRPlugin];
 }
 
