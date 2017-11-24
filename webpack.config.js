@@ -180,6 +180,16 @@ const devServer = {
     host: HOST,
     port: PORT,
 };
-webpackConfig = Object.assign(webpackConfig, { entry, output, resolve, plugins, devServer, module: moduleSetting });
+
+switch (NODE_ENV) {
+    case DEVELOPMENT:
+        webpackConfig = Object.assign(webpackConfig, { entry, output, resolve, plugins, devServer, module: moduleSetting });
+        break;
+    case PRODUCTION:
+        webpackConfig = Object.assign(webpackConfig, { entry, output, resolve, plugins, module: moduleSetting });
+    default: // eslint-disable-line
+        break;
+}
+// webpackConfig = Object.assign(webpackConfig, { entry, output, resolve, plugins, devServer, module: moduleSetting });
 webpackConfig.devtool = devTool;
 module.exports = webpackConfig;
