@@ -18,7 +18,6 @@ const COMPONENT = path.resolve(SRC, 'components'); // 组件库目录
 const LIB = path.resolve(SRC, 'libs');
 
 const TEMPLATE = 'template/index.html';
-const publicPathStr = '../'; // 公共路径字符串
 const testStr = /\.js$/; // 校验规则字符串
 const cssStr = /\.css$/;
 const pcssStr = /\.pcss$/;
@@ -54,6 +53,11 @@ if (NODE_ENV.toLowerCase() === 'product') {
     NODE_ENV = PRODUCTION;
 }
 
+let publicPathStr = '/entry/'; // 公共路径字符串
+if (NODE_ENV === PRODUCTION) {
+    publicPathStr = '../'
+}
+
 let webpackConfig = {}; // webpack设置
 
 // 入口文件配置项
@@ -61,13 +65,28 @@ const entry = {};
 // 插件配置项
 let plugins = [];
 
-const entrySettingItem = (lastPortion) => [
-    WDSEntryStr,
-    HMREntryStr,
-    ReactHotLoaderStr,
-    BABEL_POLYFILL,
-    `./src/entry/${lastPortion}.js`,
-];
+const entrySettingItem = (lastPortion) => {
+    switch (NODE_ENV) {
+        case DEVELOPMENT:
+            return [
+                WDSEntryStr,
+                HMREntryStr,
+                ReactHotLoaderStr,
+                BABEL_POLYFILL,
+                `./src/entry/${lastPortion}.js`,
+            ];
+            break;
+        case PRODUCTION:
+            return [
+                ReactHotLoaderStr,
+                BABEL_POLYFILL,
+                `./src/entry/${lastPortion}.js`,
+            ];
+            break;
+        default: // eslint-disable-line
+            break;
+    }
+};
 
 rd.eachFileFilterSync(ENTRY, testStr, (file) => {
     const lastPortion = path.basename(file, '.js').toLowerCase();
@@ -89,7 +108,10 @@ resolve = Object.assign(resolve, { alias }, { extensions });
 
 // HMR插件
 const HMRPlugin = new webpack.HotModuleReplacementPlugin();
-plugins = [...plugins, HMRPlugin];
+
+if (NODE_ENV === PRODUCTION) {
+    plugins = [...plugins, HMRPlugin];
+}
 
 // definePlugin定义全局环境变量
 const defineEnvPlugin = (envStr) => {
@@ -112,6 +134,7 @@ switch (NODE_ENV) {
         break;
     case PRODUCTION:
         plugins = [...plugins, uglifyPlugin, defineEnvPlugin(PRODUCTION)];
+        break;
     default: // eslint-disable-line
         break;
 }
