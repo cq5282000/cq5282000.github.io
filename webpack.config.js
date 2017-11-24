@@ -61,13 +61,28 @@ const entry = {};
 // 插件配置项
 let plugins = [];
 
-const entrySettingItem = (lastPortion) => [
-    // WDSEntryStr,
-    // HMREntryStr,
-    ReactHotLoaderStr,
-    BABEL_POLYFILL,
-    `./src/entry/${lastPortion}.js`,
-];
+const entrySettingItem = (lastPortion) => {
+    switch (NODE_ENV) {
+        case DEVELOPMENT:
+            return [
+                WDSEntryStr,
+                HMREntryStr,
+                ReactHotLoaderStr,
+                BABEL_POLYFILL,
+                `./src/entry/${lastPortion}.js`,
+            ];
+            break;
+        case PRODUCTION:
+            return [
+                ReactHotLoaderStr,
+                BABEL_POLYFILL,
+                `./src/entry/${lastPortion}.js`,
+            ];
+            break;
+        default: // eslint-disable-line
+            break;
+    }
+};
 
 rd.eachFileFilterSync(ENTRY, testStr, (file) => {
     const lastPortion = path.basename(file, '.js').toLowerCase();
@@ -89,8 +104,10 @@ resolve = Object.assign(resolve, { alias }, { extensions });
 
 // HMR插件
 const HMRPlugin = new webpack.HotModuleReplacementPlugin();
-// plugins = [...plugins, HMRPlugin];
 
+if (NODE_ENV === DEVELOPMENT) {
+    plugins = [...plugins, HMRPlugin];
+}
 // definePlugin定义全局环境变量
 const defineEnvPlugin = (envStr) => {
     return new webpack.DefinePlugin({
@@ -112,6 +129,7 @@ switch (NODE_ENV) {
         break;
     case PRODUCTION:
         plugins = [...plugins, uglifyPlugin, defineEnvPlugin(PRODUCTION)];
+        break;
     default: // eslint-disable-line
         break;
 }
