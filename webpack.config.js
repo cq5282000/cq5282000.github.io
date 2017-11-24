@@ -18,7 +18,7 @@ const COMPONENT = path.resolve(SRC, 'components'); // 组件库目录
 const LIB = path.resolve(SRC, 'libs');
 
 const TEMPLATE = 'template/index.html';
-const publicPathStr = '/entry/'; // 公共路径字符串
+// const publicPathStr = '/entry/'; // 公共路径字符串
 const testStr = /\.js$/; // 校验规则字符串
 const cssStr = /\.css$/;
 const pcssStr = /\.pcss$/;
@@ -120,7 +120,7 @@ switch (NODE_ENV) {
 const output = {
     path: DIST,
     filename: outputFilenameStr,
-    publicPath: publicPathStr,
+    // publicPath: publicPathStr,
 };
 
 // devTool 配置
@@ -176,7 +176,7 @@ const devServer = {
     inline: true,
     historyApiFallback: true,
     stats: statsStr,
-    publicPath: publicPathStr,
+    // publicPath: publicPathStr,
     host: HOST,
     port: PORT,
 };
