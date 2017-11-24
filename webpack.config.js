@@ -89,8 +89,15 @@ resolve = Object.assign(resolve, { alias }, { extensions });
 
 // HMR插件
 const HMRPlugin = new webpack.HotModuleReplacementPlugin();
-plugins = [...plugins, HMRPlugin];
 
+// plugins = [...plugins, HMRPlugin];
+switch (NODE_ENV) {
+    case DEVELOPMENT:
+        plugins = [...plugins, HMRPlugin];
+        break;
+    default: // eslint-disable-line
+        break;
+}
 // definePlugin定义全局环境变量
 const defineEnvPlugin = (envStr) => {
     return new webpack.DefinePlugin({
