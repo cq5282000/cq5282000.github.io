@@ -25,7 +25,7 @@ const pcssStr = /\.pcss$/;
 const outputFilenameStr = '[name].js';
 const statsStr = 'normal'; // stats 设置
 const HMREntryStr = 'webpack/hot/dev-server'; // HMR 入口设置
-const WDSEntryStr = 'webpack-dev-server/client?http://localhost:8080/'; // WDS入口设置
+const WDSEntryStr = 'webpack-dev-server/client?http://' + require("os").hostname() + ':8080/'; // WDS入口设置
 const ReactHotLoaderStr = 'react-hot-loader/patch'; // react-hot-loader 入口设置
 const BABEL_POLYFILL = 'babel-polyfill';
 const libPathStr = '@visus-libs';
@@ -180,16 +180,6 @@ const devServer = {
     host: HOST,
     port: PORT,
 };
-
-switch (NODE_ENV) {
-    case DEVELOPMENT:
-        webpackConfig = Object.assign(webpackConfig, { entry, output, resolve, plugins, devServer, module: moduleSetting });
-        break;
-    case PRODUCTION:
-        webpackConfig = Object.assign(webpackConfig, { entry, output, resolve, plugins, module: moduleSetting });
-    default: // eslint-disable-line
-        break;
-}
-// webpackConfig = Object.assign(webpackConfig, { entry, output, resolve, plugins, devServer, module: moduleSetting });
+webpackConfig = Object.assign(webpackConfig, { entry, output, resolve, plugins, devServer, module: moduleSetting });
 webpackConfig.devtool = devTool;
 module.exports = webpackConfig;
