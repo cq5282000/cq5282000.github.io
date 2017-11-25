@@ -7,7 +7,7 @@ import './IndexComponent.pcss';
 export default class IndexComponent extends Component {
     render() {
         return (
-            <div>IndexComponent111111111</div>
+            <div>IndexComponent111111112</div>
         );
     }
 }

@@ -13,7 +13,7 @@ const PORT = 8080; // 端口
 const ROOT = process.cwd(); // 运行目录
 const SRC = path.resolve(ROOT, 'src'); // 工作目录
 const ENTRY = path.resolve(SRC, 'entry'); // 入口文件目录
-const DIST = path.resolve(ROOT, 'dist'); // 输出文件目录
+const PERSONAL_WEBSITE = path.resolve(ROOT, 'personal-website'); // 输出文件目录
 const COMPONENT = path.resolve(SRC, 'components'); // 组件库目录
 const LIB = path.resolve(SRC, 'libs');
 
@@ -21,7 +21,7 @@ const TEMPLATE = 'template/index.html';
 const testStr = /\.js$/; // 校验规则字符串
 const cssStr = /\.css$/;
 const pcssStr = /\.pcss$/;
-const outputFilenameStr = '[name].js';
+const outputFilenameStr = 'js/[name].js';
 const statsStr = 'normal'; // stats 设置
 const HMREntryStr = 'webpack/hot/dev-server'; // HMR 入口设置
 const WDSEntryStr = 'webpack-dev-server/client?http://localhost:8080/'; // WDS入口设置
@@ -55,7 +55,7 @@ if (NODE_ENV.toLowerCase() === 'product') {
 
 let publicPathStr = '/entry/'; // 公共路径字符串
 if (NODE_ENV === PRODUCTION) {
-    publicPathStr = '../';
+    publicPathStr = '';
 }
 
 let webpackConfig = {}; // webpack设置
@@ -90,7 +90,7 @@ rd.eachFileFilterSync(ENTRY, testStr, (file) => {
     const lastPortion = path.basename(file, '.js').toLowerCase();
     entry[lastPortion] = entrySettingItem(lastPortion);
     const htmlWebpackPluginItem = new HtmlWebpackPlugin({
-        filename: `html/${lastPortion}.html`, // 生成文件位置
+        filename: `${lastPortion}.html`, // 生成文件位置
         template: TEMPLATE, // 模版文件位置
         chunks: [lastPortion], // 绑定对应打包的JS文件
     });
@@ -139,7 +139,7 @@ switch (NODE_ENV) {
 
 // 输出配置
 const output = {
-    path: DIST,
+    path: PERSONAL_WEBSITE,
     filename: outputFilenameStr,
     publicPath: publicPathStr,
 };
