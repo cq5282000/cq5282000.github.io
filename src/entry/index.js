@@ -6,8 +6,8 @@ import render from '../libs/createRender';
 
 render(IndexDemoContainer);
 if (module.hot) {
-    module.hot.accept('../containers/IndexFetchDemo/IndexFetchDemoContainer', () => {
-        const NewEntry = require('../containers/IndexFetchDemo/IndexFetchDemoContainer').default;
+    module.hot.accept('../containers/IndexContainer/IndexContainer', () => {
+        const NewEntry = require('../containers/IndexContainer/IndexContainer').default;
         render(NewEntry);
     });
 }
